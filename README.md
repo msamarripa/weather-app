@@ -16,13 +16,14 @@ Hosted demo site available [here](https://graceful-churros-fa9f87.netlify.app/),
 1. [NodeJS / NPM](https://nodejs.org/en/download/)
 2. [OpenWeatherMap](https://openweathermap.org/api) API Key. Account will need to be created & API key can be found in account info.
 
-## How to get started
+## How to run project
 
-1. Clone the repository
-2. Navigate to root directory of the repository in a terminal
-3. Run `npm install`
-4. Open up the `.env` file in the root directory of the repository. In this file replace `[API_KEY]` with your API Key from OpenWeatherMap (replace brackets as well)
-5. Run `npm start`
+1. Meet above requirements
+2. Clone the repository
+3. Navigate to root directory of the repository in a terminal
+4. Run `npm install`
+5. Open up the `.env` file in the root directory of the repository. In this file replace `[API_KEY]` with your API Key from OpenWeatherMap (replace brackets as well)
+6. Run `npm start` from the root directory
 
 This should open up a browser window with the application, but you can also navigate to [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
