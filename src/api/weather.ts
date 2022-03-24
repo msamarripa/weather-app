@@ -56,7 +56,7 @@ const api = axios.create({
   },
 });
 
-function getCurrentWeather(coords: Coord): Promise<AxiosResponse> {
+const getCurrentWeather = (coords: Coord): Promise<AxiosResponse> => {
   // return new Promise((resolve) => {
   //   setTimeout(
   //     () =>
@@ -108,6 +108,6 @@ function getCurrentWeather(coords: Coord): Promise<AxiosResponse> {
   });
 }
 
-export default {
-  getCurrentWeather
-}
+const weatherApi = { getCurrentWeather }
+
+export default weatherApi

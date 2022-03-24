@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 export interface Geolocation {
     zip: string;
@@ -17,11 +17,10 @@ const api = axios.create({
 });
 
 
-function getGeolocationDataByZip(zip: string) {
-
+const getGeolocationDataByZip = (zip: string): Promise<AxiosResponse> => {
     return api.get(`/zip?zip=${zip}`)
 }
 
-export default {
-    getGeolocationDataByZip
-}
+const geolocationApi = { getGeolocationDataByZip }
+
+export default geolocationApi
