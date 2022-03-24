@@ -26,7 +26,7 @@ export const CurrentWeatherCard = () => {
 
   return (
     <>
-      <Heading>Current Weather</Heading>
+      <Heading size="md">Current Weather</Heading>
       <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p="5" w="100%">
         <Center>
           <Text fontSize="sm">

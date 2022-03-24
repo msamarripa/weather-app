@@ -25,7 +25,7 @@ export const SevenDayForecast = () => {
 
   return (
     <>
-      <Heading>7 Day Forecast</Heading>
+      <Heading size="md">7 Day Forecast</Heading>
       {forecastData.map((dailyData: DailyEntity, i) => (
         <Box
           key={i}

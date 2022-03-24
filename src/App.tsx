@@ -1,82 +1,105 @@
-import { useState, useEffect, ChangeEvent } from "react"
-import { useAppDispatch } from './redux/hooks';
-import {
-  Box,
-  Divider,
-  VStack,
-  Text,
-  useToast,
-} from "@chakra-ui/react"
+import { useState, useEffect, ChangeEvent } from "react";
+import { useAppDispatch } from "./redux/hooks";
+import { Box, Divider, VStack, Text, useToast } from "@chakra-ui/react";
 import { Coord } from "./api/weather";
 import {
   getAllWeatherAsync,
-} from './redux/weatherSlice';
+  getLocationNameByCoordsASync,
+} from "./redux/weatherSlice";
 
-import { Header } from "./components/Header"
+import { Header } from "./components/Header";
 
-
-import geolocationApi from "./api/geolocation";
+import geolocationApi, { Geolocation } from "./api/geolocation";
 import { Weather } from "./views/Weather";
+import { AxiosResponse } from "axios";
 
 export const App = () => {
-  const [coords, setCoords] = useState({ lat: Number.NEGATIVE_INFINITY, lon: Number.NEGATIVE_INFINITY } as Coord)
-  const [zip, setZip] = useState("");
+  const [coords, setCoords] = useState({
+    lat: Number.NEGATIVE_INFINITY,
+    lon: Number.NEGATIVE_INFINITY,
+  } as Coord);
+  const [query, setQuery] = useState("");
   const dispatch = useAppDispatch();
 
-  const toast = useToast()
+  const toast = useToast();
 
   const isCoordsSet = (coordsToCheck: Coord): boolean => {
-    return coordsToCheck.lat !== Number.NEGATIVE_INFINITY && coordsToCheck.lon !== Number.NEGATIVE_INFINITY
-  }
+    return (
+      coordsToCheck.lat !== Number.NEGATIVE_INFINITY &&
+      coordsToCheck.lon !== Number.NEGATIVE_INFINITY
+    );
+  };
 
   useEffect(() => {
     if (!isCoordsSet(coords)) {
       if (navigator && navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
-          setCoords({ lat: position.coords.latitude, lon: position.coords.longitude })
+          setCoords({
+            lat: position.coords.latitude,
+            lon: position.coords.longitude,
+          });
         });
       }
     } else if (isCoordsSet(coords)) {
-      dispatch(getAllWeatherAsync(coords))
+      dispatch(getLocationNameByCoordsASync(coords));
+      dispatch(getAllWeatherAsync(coords));
     }
-  }, [coords, dispatch])
+  }, [coords, dispatch]);
 
-  const handleZipChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setZip(event.target.value)
-  }
+  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
+
+  const handleGeolocationError = (error: any) => {
+    toast({
+      title: "Error",
+      position: "top",
+      description: "There was an error getting geolocation data.",
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+    });
+  };
 
   const handleSearchClick = () => {
-    if (new RegExp(/^\d{5}$/).test(zip)) {
-      geolocationApi.getGeolocationDataByZip(zip).then((response: any) => {
-        setCoords({ lat: response.data.lat, lon: response.data.lon })
-      }).catch((error) => {
-        console.log(error)
-      })
+    if (new RegExp(/^\d{5}$/).test(query)) {
+      geolocationApi
+        .getGeolocationDataByZip(query)
+        .then((response: AxiosResponse<Geolocation>) => {
+          setCoords({ lat: response.data.lat, lon: response.data.lon });
+        })
+        .catch(handleGeolocationError);
     } else {
-      toast({
-        title: "Error",
-        position: "top",
-        description: "Zip code is not valid",
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-      })
+      geolocationApi
+        .getGeolocationDataByName(query)
+        .then((response) => {
+          setCoords({ lat: response.data[0].lat, lon: response.data[0].lon });
+        })
+        .catch(handleGeolocationError);
     }
-  }
+  };
 
   let main;
   if (!isCoordsSet(coords)) {
-    main = <Text>Location could not be determined automatically, please enter Zip Code above.</Text>
+    main = (
+      <Text>
+        Location could not be determined automatically, please enter Zip Code
+        above.
+      </Text>
+    );
   } else {
-    main = <Weather />
+    main = <Weather />;
   }
 
   return (
     <Box textAlign="center" fontSize="xl">
-      <Header zip={zip} handleZipChange={handleZipChange} handleSearchClick={handleSearchClick}></Header>
+      <Header
+        query={query}
+        handleQueryChange={handleQueryChange}
+        handleSearchClick={handleSearchClick}
+      ></Header>
       <Divider />
-      <VStack p={3}>
-        {main}
-      </VStack>
-    </Box>)
-}
+      <VStack p={3}>{main}</VStack>
+    </Box>
+  );
+};

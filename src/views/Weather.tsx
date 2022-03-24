@@ -1,10 +1,11 @@
-import { Spinner, VStack } from "@chakra-ui/react";
+import { Spinner, VStack, Heading } from "@chakra-ui/react";
 import { CurrentWeatherCard } from "../components/CurrentWeatherCard";
 import { SevenDayForecast } from "../components/SevenDayForecastDeck";
 import { useAppSelector } from "../redux/hooks";
-import { selectAllWeatherStatus } from "../redux/weatherSlice";
+import { getLocationName, selectAllWeatherStatus } from "../redux/weatherSlice";
 
 export const Weather = () => {
+  const locationName = useAppSelector(getLocationName);
   const allWeatherStatus = useAppSelector(selectAllWeatherStatus);
 
   let main;
@@ -13,6 +14,7 @@ export const Weather = () => {
   } else if (allWeatherStatus === "loaded") {
     main = (
       <VStack>
+        <Heading>{locationName}</Heading>
         <CurrentWeatherCard />
         <SevenDayForecast />
       </VStack>

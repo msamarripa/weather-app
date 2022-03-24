@@ -1,26 +1,29 @@
-import { act, fireEvent, screen, waitFor } from "@testing-library/react"
-import { render } from "./test-utils"
-import { App } from "../App"
-import { COLOR_SWITCHER, HEADER, SEARCH_BUTTON, ZIP_INPUT } from "./testIdConsts"
-import "@testing-library/jest-dom"
-import mockGeolocationApi from "../api/geolocation"
-import mockWeatherApi from "../api/weather"
-import { AxiosResponse } from "axios"
-
-
+import { act, fireEvent, screen, waitFor } from "@testing-library/react";
+import { render } from "./test-utils";
+import { App } from "../App";
+import {
+  COLOR_SWITCHER,
+  HEADER,
+  SEARCH_BUTTON,
+  QUERY_INPUT,
+} from "./testIdConsts";
+import "@testing-library/jest-dom";
+import mockGeolocationApi from "../api/geolocation";
+import mockWeatherApi from "../api/weather";
+import { AxiosResponse } from "axios";
 
 test("renders Header with input & color switcher", () => {
-  render(<App />)
+  render(<App />);
 
-  const headerElement = screen.queryByTestId(HEADER)
-  expect(headerElement).toBeInTheDocument()
+  const headerElement = screen.queryByTestId(HEADER);
+  expect(headerElement).toBeInTheDocument();
 
-  const zipInput = screen.queryByTestId(ZIP_INPUT)
-  expect(zipInput).toBeInTheDocument()
+  const queryInput = screen.queryByTestId(QUERY_INPUT);
+  expect(queryInput).toBeInTheDocument();
 
-  const colorSwitcher = screen.queryByTestId(COLOR_SWITCHER)
-  expect(colorSwitcher).toBeInTheDocument()
-})
+  const colorSwitcher = screen.queryByTestId(COLOR_SWITCHER);
+  expect(colorSwitcher).toBeInTheDocument();
+});
 
 // test("zip entered, display data", async () => {
 //   jest.spyOn(mockGeolocationApi, "getGeolocationDataByZip").mockResolvedValue({
