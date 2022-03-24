@@ -57,14 +57,15 @@ export const App = () => {
     main = <Text>{JSON.stringify(currentWeather)}</Text>
   }
 
-  return (<ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Header zip={zip} handleZipChange={handleZipChange} handleSearchClick={handleSearchClick}></Header>
-      <Divider />
-      <VStack p={3}>
-        {main}
-      </VStack>
+  return (
+    <ChakraProvider theme={theme}>
+      <Box textAlign="center" fontSize="xl">
+        <Header zip={zip} handleZipChange={handleZipChange} handleSearchClick={handleSearchClick}></Header>
+        <Divider />
+        <VStack p={3}>
+          {main}
+        </VStack>
 
-    </Box>
-  </ChakraProvider>)
+      </Box>
+    </ChakraProvider>)
 }
