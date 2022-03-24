@@ -19,6 +19,7 @@ import { Header } from "./components/Header"
 
 import theme from "./theme";
 import geolocationApi from "./api/geolocation";
+import { CurrentWeatherCard } from "./components/CurrentWeatherCard";
 
 export const App = () => {
   const [coords, setCoords] = useState({ lat: Number.NEGATIVE_INFINITY, lon: Number.NEGATIVE_INFINITY } as Coord)
@@ -56,10 +57,16 @@ export const App = () => {
   }
 
   let main;
-  if (currentWeatherStatus === "loading") {
-    main = <Spinner />
-  } else if (currentWeatherStatus === "idle") {
-    main = <Text>{JSON.stringify(currentWeather)}</Text>
+
+
+  if (coords.lat === Number.NEGATIVE_INFINITY && coords.lon === Number.NEGATIVE_INFINITY && zip === "") {
+    main = <Text>Location could not be determined automatically, please enter Zip Code above.</Text>
+  } else {
+    if (currentWeatherStatus === "loading") {
+      main = <Spinner />
+    } else if (currentWeatherStatus === "idle") {
+      main = <CurrentWeatherCard currentWeatherData={currentWeather} />
+    }
   }
 
   return (
