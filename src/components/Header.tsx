@@ -19,5 +19,4 @@ export const Header = (props: HeaderProps) => (
         <Spacer />
         <ColorModeSwitcher />
     </Flex>
-
 )

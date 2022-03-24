@@ -9,11 +9,10 @@ import {
     StatHelpText,
     VStack,
 } from "@chakra-ui/react"
-import { CurrentWeather } from "../api/weather"
 import dayjs from "dayjs"
 
 type CurrentWeatherCardProps = {
-    currentWeatherData: CurrentWeather
+    currentWeatherData: any
 }
 
 const timeFormat = "h:mm A"

@@ -1,23 +1,36 @@
 import axios, { AxiosResponse } from "axios";
 
-export interface CurrentWeather {
-  coord: Coord;
-  weather: Array<WeatherEntity>;
-  base: string;
-  main: Main;
-  visibility: number;
-  wind: Wind;
-  clouds: Clouds;
-  dt: number;
-  sys: Sys;
-  timezone: number;
-  id: number;
-  name: string;
-  cod: number;
-}
 export interface Coord {
   lon: number;
   lat: number;
+}
+
+export interface Weather {
+  lat: number;
+  lon: number;
+  timezone: string;
+  timezone_offset: number;
+  current: Current;
+  minutely?: MinutelyEntity[] | null;
+  hourly?: HourlyEntity[] | null;
+  daily?: DailyEntity[] | null;
+}
+export interface Current {
+  dt: number;
+  sunrise: number;
+  sunset: number;
+  temp: number;
+  feels_like: number;
+  pressure: number;
+  humidity: number;
+  dew_point: number;
+  uvi: number;
+  clouds: number;
+  visibility: number;
+  wind_speed: number;
+  wind_deg: number;
+  wind_gust: number;
+  weather?: WeatherEntity[] | null;
 }
 export interface WeatherEntity {
   id: number;
@@ -25,27 +38,60 @@ export interface WeatherEntity {
   description: string;
   icon: string;
 }
-export interface Main {
+export interface MinutelyEntity {
+  dt: number;
+  precipitation: number;
+}
+export interface HourlyEntity {
+  dt: number;
   temp: number;
   feels_like: number;
-  temp_min: number;
-  temp_max: number;
   pressure: number;
   humidity: number;
+  dew_point: number;
+  uvi: number;
+  clouds: number;
+  visibility: number;
+  wind_speed: number;
+  wind_deg: number;
+  wind_gust: number;
+  weather?: WeatherEntity[] | null;
+  pop: number;
 }
-export interface Wind {
-  speed: number;
-  deg: number;
-}
-export interface Clouds {
-  all: number;
-}
-export interface Sys {
-  type: number;
-  id: number;
-  country: string;
+export interface DailyEntity {
+  dt: number;
   sunrise: number;
   sunset: number;
+  moonrise: number;
+  moonset: number;
+  moon_phase: number;
+  temp: Temp;
+  feels_like: FeelsLike;
+  pressure: number;
+  humidity: number;
+  dew_point: number;
+  wind_speed: number;
+  wind_deg: number;
+  wind_gust: number;
+  weather?: WeatherEntity[] | null;
+  clouds: number;
+  pop: number;
+  uvi: number;
+  rain?: number | null;
+}
+export interface Temp {
+  day: number;
+  min: number;
+  max: number;
+  night: number;
+  eve: number;
+  morn: number;
+}
+export interface FeelsLike {
+  day: number;
+  night: number;
+  eve: number;
+  morn: number;
 }
 
 const api = axios.create({
@@ -56,58 +102,15 @@ const api = axios.create({
   },
 });
 
-const getCurrentWeather = (coords: Coord): Promise<AxiosResponse> => {
-  // return new Promise((resolve) => {
-  //   setTimeout(
-  //     () =>
-  //       resolve({
-  //         data: {
-  //           coord: { lon: -105.2646, lat: 40.0131 },
-  //           weather: [
-  //             {
-  //               id: 802,
-  //               main: "Clouds",
-  //               description: "scattered clouds",
-  //               icon: "03n",
-  //             },
-  //           ],
-  //           base: "stations",
-  //           main: {
-  //             temp: 53.49,
-  //             feels_like: 50.32,
-  //             temp_min: 47.37,
-  //             temp_max: 58.05,
-  //             pressure: 1005,
-  //             humidity: 38,
-  //           },
-  //           visibility: 10000,
-  //           wind: { speed: 11.5, deg: 300 },
-  //           clouds: { all: 40 },
-  //           dt: 1647828139,
-  //           sys: {
-  //             type: 2,
-  //             id: 2041009,
-  //             country: "US",
-  //             sunrise: 1647781461,
-  //             sunset: 1647825156,
-  //           },
-  //           timezone: -21600,
-  //           id: 5574991,
-  //           name: "Boulder",
-  //           cod: 200,
-  //         } as CurrentWeather,
-  //       } as AxiosResponse),
-  //     2000
-  //   );
-  // });
-  return api.get("/weather", {
+const getAllWeather = (coords: Coord): Promise<AxiosResponse> => {
+  return api.get("/onecall", {
     params: {
       lat: coords.lat,
       lon: coords.lon,
     },
   });
-}
+};
 
-const weatherApi = { getCurrentWeather }
+const weatherApi = { getAllWeather };
 
-export default weatherApi
+export default weatherApi;

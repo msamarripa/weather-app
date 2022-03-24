@@ -1,31 +1,26 @@
 import { useState, useEffect, ChangeEvent } from "react"
-import { useAppSelector, useAppDispatch } from './redux/hooks';
+import { useAppDispatch } from './redux/hooks';
 import {
   Box,
   Divider,
-  Spinner,
   VStack,
   Text,
   useToast,
 } from "@chakra-ui/react"
 import { Coord } from "./api/weather";
 import {
-  getCurrentWeatherAsync,
-  selectCurrentWeather,
-  selectCurrentWeatherStatus
+  getAllWeatherAsync,
 } from './redux/weatherSlice';
 
 import { Header } from "./components/Header"
 
 
 import geolocationApi from "./api/geolocation";
-import { CurrentWeatherCard } from "./components/CurrentWeatherCard";
+import { Weather } from "./views/Weather";
 
 export const App = () => {
   const [coords, setCoords] = useState({ lat: Number.NEGATIVE_INFINITY, lon: Number.NEGATIVE_INFINITY } as Coord)
   const [zip, setZip] = useState("");
-  const currentWeather = useAppSelector(selectCurrentWeather);
-  const currentWeatherStatus = useAppSelector(selectCurrentWeatherStatus)
   const dispatch = useAppDispatch();
 
   const toast = useToast()
@@ -42,7 +37,7 @@ export const App = () => {
         });
       }
     } else if (isCoordsSet(coords)) {
-      dispatch(getCurrentWeatherAsync(coords))
+      dispatch(getAllWeatherAsync(coords))
     }
   }, [coords, dispatch])
 
@@ -70,14 +65,10 @@ export const App = () => {
   }
 
   let main;
-  if (!isCoordsSet(coords) && currentWeather) {
+  if (!isCoordsSet(coords)) {
     main = <Text>Location could not be determined automatically, please enter Zip Code above.</Text>
   } else {
-    if (currentWeatherStatus === "loading") {
-      main = <Spinner />
-    } else if (currentWeatherStatus === "idle") {
-      main = <CurrentWeatherCard currentWeatherData={currentWeather} />
-    }
+    main = <Weather />
   }
 
   return (
