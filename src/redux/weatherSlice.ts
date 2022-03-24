@@ -4,12 +4,12 @@ import weatherApi, { Coord, Weather } from "../api/weather";
 
 export interface WeatherState {
   allWeather: Weather;
-  status: "idle" | "loading" | "failed";
+  status: "empty" | "loading" | "failed" | "loaded";
 }
 
 const initialState: WeatherState = {
   allWeather: {} as Weather,
-  status: "idle",
+  status: "empty",
 };
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -46,7 +46,7 @@ export const weatherSlice = createSlice({
         state.status = "loading";
       })
       .addCase(getAllWeatherAsync.fulfilled, (state, action) => {
-        state.status = "idle";
+        state.status = "loaded";
         state.allWeather = action.payload;
       });
   },
@@ -58,6 +58,12 @@ export const weatherSlice = createSlice({
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 export const selectAllWeather = (state: RootState) => state.weather.allWeather;
+export const selectDailyForecast = (state: RootState) =>
+  state.weather.allWeather.daily;
+export const selectCurrentWeather = (state: RootState) =>
+  state.weather.allWeather.current;
+export const selectTimezone = (state: RootState) =>
+  state.weather.allWeather.timezone;
 export const selectAllWeatherStatus = (state: RootState) =>
   state.weather.status;
 

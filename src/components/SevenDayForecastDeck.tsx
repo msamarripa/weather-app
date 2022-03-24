@@ -13,20 +13,20 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import tz from "dayjs/plugin/timezone";
 import { DailyEntity } from "../api/weather";
+import { useAppSelector } from "../redux/hooks";
+import { selectDailyForecast, selectTimezone } from "../redux/weatherSlice";
 
 dayjs.extend(utc);
 dayjs.extend(tz);
 
-type SevenDayForeCastDeckProps = {
-  timezone: string;
-  forecastData: Array<DailyEntity>;
-};
+export const SevenDayForecast = () => {
+  const forecastData = useAppSelector(selectDailyForecast);
+  const timezone = useAppSelector(selectTimezone);
 
-export const SevenDayForecast = (props: SevenDayForeCastDeckProps) => {
   return (
     <>
       <Heading>7 Day Forecast</Heading>
-      {props.forecastData.map((dailyData: DailyEntity, i) => (
+      {forecastData.map((dailyData: DailyEntity, i) => (
         <Box
           key={i}
           w="100%"
@@ -38,10 +38,10 @@ export const SevenDayForecast = (props: SevenDayForeCastDeckProps) => {
           <HStack>
             <Stat>
               <StatNumber>
-                {dayjs.unix(dailyData.dt).tz(props.timezone).format("ddd")}
+                {dayjs.unix(dailyData.dt).tz(timezone).format("ddd")}
               </StatNumber>
               <StatHelpText>
-                {dayjs.unix(dailyData.dt).tz(props.timezone).format("M/D")}
+                {dayjs.unix(dailyData.dt).tz(timezone).format("M/D")}
               </StatHelpText>
             </Stat>
             <Image
