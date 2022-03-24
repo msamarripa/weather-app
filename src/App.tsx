@@ -1,12 +1,12 @@
 import { useState, useEffect, ChangeEvent } from "react"
 import { useAppSelector, useAppDispatch } from './redux/hooks';
 import {
-  ChakraProvider,
   Box,
   Divider,
   Spinner,
   VStack,
   Text,
+  useToast,
 } from "@chakra-ui/react"
 import { Coord } from "./api/weather";
 import {
@@ -17,7 +17,7 @@ import {
 
 import { Header } from "./components/Header"
 
-import theme from "./theme";
+
 import geolocationApi from "./api/geolocation";
 import { CurrentWeatherCard } from "./components/CurrentWeatherCard";
 
@@ -27,6 +27,8 @@ export const App = () => {
   const currentWeather = useAppSelector(selectCurrentWeather);
   const currentWeatherStatus = useAppSelector(selectCurrentWeatherStatus)
   const dispatch = useAppDispatch();
+
+  const toast = useToast()
 
   useEffect(() => {
     if (coords.lat === Number.NEGATIVE_INFINITY && coords.lon === Number.NEGATIVE_INFINITY) {
@@ -52,14 +54,21 @@ export const App = () => {
         console.log(error)
       })
     } else {
-      alert("This is an invalid zip")
+      toast({
+        title: "Error",
+        position: "top",
+        description: "Zip code is not valid",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      })
     }
   }
 
   let main;
 
 
-  if (coords.lat === Number.NEGATIVE_INFINITY && coords.lon === Number.NEGATIVE_INFINITY && zip === "") {
+  if (coords.lat === Number.NEGATIVE_INFINITY && coords.lon === Number.NEGATIVE_INFINITY && currentWeather) {
     main = <Text>Location could not be determined automatically, please enter Zip Code above.</Text>
   } else {
     if (currentWeatherStatus === "loading") {
@@ -70,14 +79,11 @@ export const App = () => {
   }
 
   return (
-    <ChakraProvider theme={theme}>
-      <Box textAlign="center" fontSize="xl">
-        <Header zip={zip} handleZipChange={handleZipChange} handleSearchClick={handleSearchClick}></Header>
-        <Divider />
-        <VStack p={3}>
-          {main}
-        </VStack>
-
-      </Box>
-    </ChakraProvider>)
+    <Box textAlign="center" fontSize="xl">
+      <Header zip={zip} handleZipChange={handleZipChange} handleSearchClick={handleSearchClick}></Header>
+      <Divider />
+      <VStack p={3}>
+        {main}
+      </VStack>
+    </Box>)
 }

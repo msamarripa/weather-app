@@ -1,4 +1,4 @@
-import { ColorModeScript } from "@chakra-ui/react"
+import { ChakraProvider, ColorModeScript } from "@chakra-ui/react"
 import * as React from "react"
 import ReactDOM from "react-dom"
 import { App } from "./App"
@@ -6,12 +6,15 @@ import { store } from './redux/store';
 import { Provider } from 'react-redux';
 import reportWebVitals from "./reportWebVitals"
 import * as serviceWorker from "./serviceWorker"
+import theme from "./theme";
 
 ReactDOM.render(
   <React.StrictMode>
     <ColorModeScript />
     <Provider store={store}>
-      <App />
+      <ChakraProvider theme={theme}>
+        <App />
+      </ChakraProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root"),
