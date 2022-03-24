@@ -30,14 +30,18 @@ export const App = () => {
 
   const toast = useToast()
 
+  const isCoordsSet = (coordsToCheck: Coord): boolean => {
+    return coordsToCheck.lat !== Number.NEGATIVE_INFINITY && coordsToCheck.lon !== Number.NEGATIVE_INFINITY
+  }
+
   useEffect(() => {
-    if (coords.lat === Number.NEGATIVE_INFINITY && coords.lon === Number.NEGATIVE_INFINITY) {
+    if (!isCoordsSet(coords)) {
       if (navigator && navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
           setCoords({ lat: position.coords.latitude, lon: position.coords.longitude })
         });
       }
-    } else if (coords.lat !== Number.NEGATIVE_INFINITY && coords.lon !== Number.NEGATIVE_INFINITY) {
+    } else if (isCoordsSet(coords)) {
       dispatch(getCurrentWeatherAsync(coords))
     }
   }, [coords, dispatch])
@@ -66,9 +70,7 @@ export const App = () => {
   }
 
   let main;
-
-
-  if (coords.lat === Number.NEGATIVE_INFINITY && coords.lon === Number.NEGATIVE_INFINITY && currentWeather) {
+  if (!isCoordsSet(coords) && currentWeather) {
     main = <Text>Location could not be determined automatically, please enter Zip Code above.</Text>
   } else {
     if (currentWeatherStatus === "loading") {
