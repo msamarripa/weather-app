@@ -32,7 +32,7 @@ export const getLocationNameByCoordsASync = createAsyncThunk(
   "weather/getLocationNameByCoords",
   async (coords: Coord) => {
     const response = await geolocationApi.getLocationNameByCoords(coords);
-    return response.data[0].name;
+    return `${response.data[0].name}, ${response.data[0].country}`;
   }
 );
 
