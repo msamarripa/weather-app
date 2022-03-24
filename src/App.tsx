@@ -18,6 +18,7 @@ import {
 import { Header } from "./components/Header"
 
 import theme from "./theme";
+import geolocationApi from "./api/geolocation";
 
 export const App = () => {
   const [coords, setCoords] = useState({ lat: Number.NEGATIVE_INFINITY, lon: Number.NEGATIVE_INFINITY } as Coord)
@@ -44,7 +45,11 @@ export const App = () => {
 
   const handleSearchClick = () => {
     if (new RegExp(/^\d{5}$/).test(zip)) {
-      alert("not implemented!")
+      geolocationApi.getGeolocationDataByZip(zip).then((response: any) => {
+        setCoords({ lat: response.data.lat, lon: response.data.lon })
+      }).catch((error) => {
+        console.log(error)
+      })
     } else {
       alert("This is an invalid zip")
     }

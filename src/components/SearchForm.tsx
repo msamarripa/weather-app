@@ -1,7 +1,7 @@
 import { Input, Flex, Button, Grid } from "@chakra-ui/react"
 import { ChangeEventHandler, MouseEventHandler } from "react"
 import { FaSearch } from "react-icons/fa"
-import { ZIP_INPUT } from "../tests/testIdConsts"
+import { SEARCH_BUTTON, ZIP_INPUT } from "../tests/testIdConsts"
 
 type SearchFormProps = {
     zip: string,
@@ -19,6 +19,6 @@ export const SearchForm = (props: SearchFormProps) => (
                 onChange={props.handleZipChange}>
             </Input>
         </Grid>
-        <Button leftIcon={<FaSearch />} onClick={props.handleSearchClick}>Search</Button>
+        <Button data-testid={SEARCH_BUTTON} leftIcon={<FaSearch />} onClick={props.handleSearchClick}>Search</Button>
     </Flex>
 )

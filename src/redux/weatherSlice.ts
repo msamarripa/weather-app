@@ -1,9 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
-import {
+import weatherApi, {
   Coord,
   CurrentWeather,
-  getCurrentWeather,
 } from "../api/weather";
 
 export interface WeatherState {
@@ -24,7 +23,7 @@ const initialState: WeatherState = {
 export const getCurrentWeatherAsync = createAsyncThunk(
   "weather/getCurrentWeather",
   async (coords: Coord) => {
-    const response = await getCurrentWeather(coords);
+    const response = await weatherApi.getCurrentWeather(coords);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
