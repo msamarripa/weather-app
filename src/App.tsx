@@ -1,36 +1,37 @@
-import * as React from "react"
+import { useState, ChangeEvent } from "react"
 import {
   ChakraProvider,
   Box,
   Text,
   Link,
   VStack,
+  Divider,
   Code,
   Grid,
 } from "@chakra-ui/react"
-import theme from "./theme";
-import { ColorModeSwitcher } from "./components/ColorModeSwitcher"
+import { Header } from "./components/Header"
 
-export const App = () => (
-  <ChakraProvider theme={theme}>
+import theme from "./theme";
+
+export const App = () => {
+  const [zip, setZip] = useState("");
+
+  const handleZipChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setZip(event.target.value)
+  }
+
+  const handleSearchClick = () => {
+    if (new RegExp(/^\d{5}$/).test(zip)) {
+      alert("not implemented!")
+    } else {
+      alert("This is an invalid zip")
+    }
+  }
+
+  return (<ChakraProvider theme={theme}>
     <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
-        </VStack>
-      </Grid>
+      <Header zip={zip} handleZipChange={handleZipChange} handleSearchClick={handleSearchClick}></Header>
+      <Divider />
     </Box>
-  </ChakraProvider>
-)
+  </ChakraProvider>)
+}

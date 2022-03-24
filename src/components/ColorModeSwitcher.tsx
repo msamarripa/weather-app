@@ -6,6 +6,7 @@ import {
   IconButtonProps,
 } from "@chakra-ui/react"
 import { FaMoon, FaSun } from "react-icons/fa"
+import { COLOR_SWITCHER } from "../tests/testIdConsts"
 
 type ColorModeSwitcherProps = Omit<IconButtonProps, "aria-label">
 
@@ -16,6 +17,7 @@ export const ColorModeSwitcher: React.FC<ColorModeSwitcherProps> = (props) => {
 
   return (
     <IconButton
+      data-testid={COLOR_SWITCHER}
       size="md"
       fontSize="lg"
       variant="ghost"
