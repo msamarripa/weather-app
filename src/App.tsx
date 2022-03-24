@@ -23,15 +23,12 @@ export const App = () => {
 
   const toast = useToast();
 
-  const isCoordsSet = (coordsToCheck: Coord): boolean => {
-    return (
-      coordsToCheck.lat !== Number.NEGATIVE_INFINITY &&
-      coordsToCheck.lon !== Number.NEGATIVE_INFINITY
-    );
-  };
+  const areCoordsSet =
+    coords.lat !== Number.NEGATIVE_INFINITY &&
+    coords.lon !== Number.NEGATIVE_INFINITY;
 
   useEffect(() => {
-    if (!isCoordsSet(coords)) {
+    if (!areCoordsSet) {
       if (navigator && navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
           setCoords({
@@ -40,11 +37,11 @@ export const App = () => {
           });
         });
       }
-    } else if (isCoordsSet(coords)) {
+    } else if (areCoordsSet) {
       dispatch(getLocationNameByCoordsASync(coords));
       dispatch(getAllWeatherAsync(coords));
     }
-  }, [coords, dispatch]);
+  }, [coords, areCoordsSet, dispatch]);
 
   const handleQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
@@ -80,11 +77,11 @@ export const App = () => {
   };
 
   let main;
-  if (!isCoordsSet(coords)) {
+  if (!areCoordsSet) {
     main = (
       <Text>
-        Location could not be determined automatically, please enter Zip Code
-        above.
+        Location could not be determined automatically, please enter zip code or
+        city name above.
       </Text>
     );
   } else {
