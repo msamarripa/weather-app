@@ -39,7 +39,7 @@ export const CurrentWeatherCard = (props: CurrentWeatherCardProps) => (
       {props.currentWeatherData.weather ? (
         <VStack>
           <Image
-            src={`http://openweathermap.org/img/wn/${props.currentWeatherData.weather[0].icon}@2x.png`}
+            src={`https://openweathermap.org/img/wn/${props.currentWeatherData.weather[0].icon}@2x.png`}
           ></Image>
           <Text>
             {props.currentWeatherData.weather

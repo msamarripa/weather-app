@@ -45,7 +45,7 @@ export const SevenDayForecast = (props: SevenDayForeCastDeckProps) => {
               </StatHelpText>
             </Stat>
             <Image
-              src={`http://openweathermap.org/img/wn/${dailyData.weather[0].icon}@2x.png`}
+              src={`https://openweathermap.org/img/wn/${dailyData.weather[0].icon}@2x.png`}
             ></Image>
             <Stat>
               <StatNumber>{Math.ceil(dailyData.temp.max)}&#176;</StatNumber>
