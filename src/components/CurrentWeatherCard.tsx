@@ -1,9 +1,5 @@
 import {
     Box,
-    Table,
-    Tbody,
-    Tr,
-    Td,
     Text,
     Flex,
     Spacer,
@@ -23,7 +19,7 @@ type CurrentWeatherCardProps = {
 const timeFormat = "h:mm A"
 
 export const CurrentWeatherCard = (props: CurrentWeatherCardProps) => (
-    <Box maxW="lg" minW="lg" borderWidth="1px" borderRadius="lg" overflow="hidden" p="5">
+    <Box maxW="lg" borderWidth="1px" borderRadius="lg" overflow="hidden" p="5">
         <Flex>
             <Text fontSize="sm">Current Weather ({props.currentWeatherData.name})</Text>
             <Spacer></Spacer>
@@ -42,39 +38,5 @@ export const CurrentWeatherCard = (props: CurrentWeatherCardProps) => (
                 :
                 "N/A"
         }
-        <Flex>
-            <Table size="sm">
-                <Tbody>
-                    <Tr>
-                        <Td>Wind</Td>
-                        <Td>{props.currentWeatherData.wind?.deg}&#176; {props.currentWeatherData.wind?.speed}mph</Td>
-                    </Tr>
-                    <Tr>
-                        <Td>Humidity</Td>
-                        <Td>{props.currentWeatherData.main?.humidity}%</Td>
-                    </Tr>
-                    <Tr>
-                        <Td>Pressure</Td>
-                        <Td>{props.currentWeatherData.main?.pressure} hPa</Td>
-                    </Tr>
-                </Tbody>
-            </Table>
-            <Table size="sm">
-                <Tbody>
-                    <Tr>
-                        <Td>Sunrise</Td>
-                        <Td>{dayjs.unix(props.currentWeatherData.sys?.sunrise).format(timeFormat)}</Td>
-                    </Tr>
-                    <Tr>
-                        <Td>Sunset</Td>
-                        <Td>{dayjs.unix(props.currentWeatherData.sys?.sunset).format(timeFormat)}</Td>
-                    </Tr>
-                    <Tr>
-                        <Td>Visibility</Td>
-                        <Td>{props.currentWeatherData.visibility / 1000} km</Td>
-                    </Tr>
-                </Tbody>
-            </Table>
-        </Flex>
     </Box >
 )
