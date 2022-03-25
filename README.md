@@ -3,7 +3,7 @@ This project was bootstrapped with
 
 ## Demo
 
-Hosted demo site available [here](https://graceful-churros-fa9f87.netlify.app/), but no guarentees that it will work because I'm using free [Netlify](https://www.netlify.com) & [OpenWeatherMap](https://openweathermap.org/api) accounts
+Hosted demo site available [here](https://graceful-churros-fa9f87.netlify.app/), but **no guarentees** that it will work because I'm using free [Netlify](https://www.netlify.com) & [OpenWeatherMap](https://openweathermap.org/api) accounts
 
 ## Screenshots
 
