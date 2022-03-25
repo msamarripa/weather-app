@@ -3,16 +3,23 @@ import { RootState } from "./store";
 import weatherApi, { Coord, Weather } from "../api/weather";
 import geolocationApi from "../api/geolocation";
 
+export enum StatusType {
+  EMPTY = "EMPTY",
+  LOADING = "LOADING",
+  LOADED = "LOADED",
+  FAILED = "FAILED",
+}
+
 export interface WeatherState {
   locationName: string;
   allWeather: Weather;
-  status: "empty" | "loading" | "failed" | "loaded";
+  status: StatusType;
 }
 
 const initialState: WeatherState = {
   locationName: "N/A",
   allWeather: {} as Weather,
-  status: "empty",
+  status: StatusType.EMPTY,
 };
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -56,15 +63,18 @@ export const weatherSlice = createSlice({
       .addCase(getLocationNameByCoordsAsync.fulfilled, (state, action) => {
         state.locationName = action.payload;
       })
+      .addCase(getLocationNameByCoordsAsync.rejected, (state, action) => {
+        state.status = StatusType.FAILED;
+      })
       .addCase(getAllWeatherAsync.pending, (state) => {
-        state.status = "loading";
+        state.status = StatusType.LOADING;
       })
       .addCase(getAllWeatherAsync.fulfilled, (state, action) => {
-        state.status = "loaded";
+        state.status = StatusType.LOADED;
         state.allWeather = action.payload;
       })
       .addCase(getAllWeatherAsync.rejected, (state) => {
-        state.status = "failed";
+        state.status = StatusType.FAILED;
       });
   },
 });
