@@ -22,11 +22,15 @@ const getGeolocationDataByZip = (
   return api.get(`/zip?zip=${zip}`);
 };
 
-const getGeolocationDataByName = (q: string): Promise<AxiosResponse> => {
+const getGeolocationDataByName = (
+  q: string
+): Promise<AxiosResponse<Array<Geolocation>>> => {
   return api.get(`/direct?q=${q}&limit=1`);
 };
 
-const getLocationNameByCoords = (coords: Coord): Promise<AxiosResponse> => {
+const getLocationNameByCoords = (
+  coords: Coord
+): Promise<AxiosResponse<Array<Geolocation>>> => {
   return api.get(`/reverse?lat=${coords.lat}&lon=${coords.lon}&limit=1`);
 };
 

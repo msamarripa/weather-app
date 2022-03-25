@@ -25,18 +25,18 @@ export const App = () => {
     coords.lon !== Number.NEGATIVE_INFINITY;
 
   useEffect(() => {
-    if (!areCoordsSet) {
+    if (areCoordsSet) {
+      dispatch(getLocationNameByCoordsAsync(coords));
+      dispatch(getAllWeatherAsync(coords));
+    } else {
       if (navigator && navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
+        navigator.geolocation.getCurrentPosition((position) => {
           setCoords({
             lat: position.coords.latitude,
             lon: position.coords.longitude,
           });
         });
       }
-    } else if (areCoordsSet) {
-      dispatch(getLocationNameByCoordsAsync(coords));
-      dispatch(getAllWeatherAsync(coords));
     }
   }, [coords, areCoordsSet, dispatch]);
 
@@ -58,15 +58,15 @@ export const App = () => {
   const handleSearchClick = async () => {
     if (new RegExp(/^\d{5}$/).test(query)) {
       try {
-        const response = await geolocationApi.getGeolocationDataByZip(query);
-        setCoords({ lat: response.data.lat, lon: response.data.lon });
+        const { data } = await geolocationApi.getGeolocationDataByZip(query);
+        setCoords({ lat: data.lat, lon: data.lon });
       } catch (error) {
         handleGeolocationError(error);
       }
     } else {
       try {
-        const response = await geolocationApi.getGeolocationDataByName(query);
-        setCoords({ lat: response.data[0].lat, lon: response.data[0].lon });
+        const { data } = await geolocationApi.getGeolocationDataByName(query);
+        setCoords({ lat: data[0].lat, lon: data[0].lon });
       } catch (error) {
         handleGeolocationError(error);
       }
