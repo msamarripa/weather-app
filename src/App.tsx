@@ -4,14 +4,11 @@ import { Box, Divider, VStack, Text, useToast } from "@chakra-ui/react";
 import { Coord } from "./api/weather";
 import {
   getAllWeatherAsync,
-  getLocationNameByCoordsASync,
+  getLocationNameByCoordsAsync,
 } from "./redux/weatherSlice";
-
 import { Header } from "./components/Header";
-
-import geolocationApi, { Geolocation } from "./api/geolocation";
+import geolocationApi from "./api/geolocation";
 import { Weather } from "./views/Weather";
-import { AxiosResponse } from "axios";
 
 export const App = () => {
   const [coords, setCoords] = useState({
@@ -38,7 +35,7 @@ export const App = () => {
         });
       }
     } else if (areCoordsSet) {
-      dispatch(getLocationNameByCoordsASync(coords));
+      dispatch(getLocationNameByCoordsAsync(coords));
       dispatch(getAllWeatherAsync(coords));
     }
   }, [coords, areCoordsSet, dispatch]);
@@ -58,35 +55,23 @@ export const App = () => {
     });
   };
 
-  const handleSearchClick = () => {
+  const handleSearchClick = async () => {
     if (new RegExp(/^\d{5}$/).test(query)) {
-      geolocationApi
-        .getGeolocationDataByZip(query)
-        .then((response: AxiosResponse<Geolocation>) => {
-          setCoords({ lat: response.data.lat, lon: response.data.lon });
-        })
-        .catch(handleGeolocationError);
+      try {
+        const response = await geolocationApi.getGeolocationDataByZip(query);
+        setCoords({ lat: response.data.lat, lon: response.data.lon });
+      } catch (error) {
+        handleGeolocationError(error);
+      }
     } else {
-      geolocationApi
-        .getGeolocationDataByName(query)
-        .then((response) => {
-          setCoords({ lat: response.data[0].lat, lon: response.data[0].lon });
-        })
-        .catch(handleGeolocationError);
+      try {
+        const response = await geolocationApi.getGeolocationDataByName(query);
+        setCoords({ lat: response.data[0].lat, lon: response.data[0].lon });
+      } catch (error) {
+        handleGeolocationError(error);
+      }
     }
   };
-
-  let main;
-  if (!areCoordsSet) {
-    main = (
-      <Text>
-        Location could not be determined automatically, please enter zip code or
-        city name above.
-      </Text>
-    );
-  } else {
-    main = <Weather />;
-  }
 
   return (
     <Box textAlign="center" fontSize="xl">
@@ -96,7 +81,16 @@ export const App = () => {
         handleSearchClick={handleSearchClick}
       ></Header>
       <Divider />
-      <VStack p={3}>{main}</VStack>
+      <VStack p={3}>
+        {areCoordsSet ? (
+          <Weather />
+        ) : (
+          <Text>
+            Location could not be determined automatically, please enter zip
+            code or city name above.
+          </Text>
+        )}
+      </VStack>
     </Box>
   );
 };
