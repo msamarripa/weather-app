@@ -1,6 +1,14 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import { useAppDispatch } from "./redux/hooks";
-import { Box, Divider, VStack, Text, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Divider,
+  VStack,
+  Alert,
+  AlertIcon,
+  AlertDescription,
+  useToast,
+} from "@chakra-ui/react";
 import { Coord } from "./api/weather";
 import {
   getAllWeatherAsync,
@@ -85,10 +93,15 @@ export const App = () => {
         {areCoordsSet ? (
           <Weather />
         ) : (
-          <Text>
-            Location could not be determined automatically, please enter zip
-            code or city name above.
-          </Text>
+          <VStack>
+            <Alert status="warning">
+              <AlertIcon />
+              <AlertDescription>
+                Location could not be determined automatically, please enter zip
+                code or city name above.
+              </AlertDescription>
+            </Alert>
+          </VStack>
         )}
       </VStack>
     </Box>

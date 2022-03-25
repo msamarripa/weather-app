@@ -1,4 +1,11 @@
-import { Spinner, VStack, Heading, Text } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertIcon,
+  AlertDescription,
+  Spinner,
+  VStack,
+  Heading,
+} from "@chakra-ui/react";
 import { CurrentWeatherCard } from "../components/CurrentWeatherCard";
 import { SevenDayForecast } from "../components/SevenDayForecastDeck";
 import { useAppSelector } from "../redux/hooks";
@@ -14,17 +21,24 @@ export const Weather = () => {
 
   let main;
   if (allWeatherStatus === StatusType.LOADING) {
-    main = <Spinner />;
+    main = <Spinner size="lg" />;
   } else if (allWeatherStatus === StatusType.LOADED) {
     main = (
-      <VStack>
+      <>
         <Heading>{locationName}</Heading>
         <CurrentWeatherCard />
         <SevenDayForecast />
-      </VStack>
+      </>
     );
   } else if (allWeatherStatus === StatusType.FAILED) {
-    main = <Text>There was an error getting weather data :-(</Text>;
+    main = (
+      <Alert status="error">
+        <AlertIcon />
+        <AlertDescription>
+          There was an error getting weather data :-(
+        </AlertDescription>
+      </Alert>
+    );
   }
 
   return <VStack>{main}</VStack>;
